@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Pop-Up</title>
+  <title>For You</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,137 +11,424 @@
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-      background-color: #fffafa;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(160deg, #fffafa 0%, #fbe8ee 100%);
       color: #3a252c;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
-      text-align: center;
+      padding: 28px 16px;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    .main-card {
-      background-color: #fbe8ee;
-      border: 1.5px solid #bd7188;
-      border-radius: 16px;
-      padding: 28px 22px;
-      max-width: 360px;
+    /* Ambient floating background particles */
+    .bg-particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      bottom: -40px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.75;
+      }
+      85% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(360deg) scale(1.1);
+        opacity: 0;
+      }
+    }
+
+    /* Love Letter Card */
+    .letter-card {
+      position: relative;
+      z-index: 2;
+      background-color: #fffafa;
+      border: 2px solid #bd7188;
+      border-radius: 22px;
+      padding: 38px 26px 32px;
+      max-width: 480px;
       width: 100%;
+      box-shadow: 0 14px 36px rgba(189, 113, 136, 0.22);
+      text-align: left;
+      overflow: hidden;
+      transition: transform 0.5s ease, opacity 0.5s ease;
     }
 
-    .main-card h1 {
-      margin: 0 0 10px;
-      font-size: 1.5rem;
+    .letter-card.reveal {
+      animation: cardReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes cardReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Decorative SVG Flower Corners */
+    .flower-corner {
+      position: absolute;
+      width: 82px;
+      height: 82px;
+      pointer-events: none;
+      opacity: 0.85;
+      animation: gentleSway 5s ease-in-out infinite alternate;
+    }
+
+    .flower-top-left {
+      top: -10px;
+      left: -10px;
+    }
+
+    .flower-bottom-right {
+      bottom: -10px;
+      right: -10px;
+      transform: rotate(180deg);
+      animation-name: gentleSwayBottom;
+    }
+
+    @keyframes gentleSway {
+      from { transform: rotate(-4deg) scale(0.98); }
+      to { transform: rotate(4deg) scale(1.03); }
+    }
+
+    @keyframes gentleSwayBottom {
+      from { transform: rotate(176deg) scale(0.98); }
+      to { transform: rotate(184deg) scale(1.03); }
+    }
+
+    .letter-header {
+      text-align: center;
+      margin-bottom: 22px;
+      border-bottom: 1.5px dashed #e3aebf;
+      padding-bottom: 16px;
+    }
+
+    .header-florals {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      color: #bd7188;
+      font-size: 1.1rem;
+    }
+
+    .letter-header h1 {
+      margin: 0;
+      font-size: 1.6rem;
       color: #bd7188;
     }
 
-    .main-card p {
-      margin: 0 0 18px;
-      line-height: 1.5;
+    .letter-date {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.85rem;
+      color: #8c5a6a;
+      margin-top: 6px;
     }
 
-    .reopen-btn {
-      background-color: #bd7188;
-      color: #fffafa;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 0.95rem;
+    .letter-body p {
+      font-size: 1.03rem;
+      line-height: 1.8;
+      margin: 0 0 16px;
+    }
+
+    .letter-signoff {
+      margin-top: 26px;
+      font-style: italic;
+      color: #bd7188;
+      font-weight: bold;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-actions {
+      text-align: center;
+      margin-top: 26px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #fbe8ee;
+      color: #bd7188;
+      border: 1.5px solid #bd7188;
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
       cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.2s ease;
+    }
+
+    .action-btn:active {
+      transform: scale(0.95);
     }
 
     /* Pop-up overlay */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background-color: rgba(58, 37, 44, 0.55);
+      background-color: rgba(58, 37, 44, 0.65);
+      backdrop-filter: blur(4px);
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 20px;
       z-index: 1000;
+      transition: opacity 0.35s ease;
     }
 
     .modal-backdrop.hidden {
-      display: none;
+      opacity: 0;
+      pointer-events: none;
     }
 
-    /* Pop-up box */
+    /* Pop-up envelope box */
     .modal-box {
-      background-color: #fffafa;
+      position: relative;
+      background: linear-gradient(180deg, #fffafa 0%, #fbe8ee 100%);
       border: 2px solid #bd7188;
-      border-radius: 18px;
-      padding: 26px 22px;
-      max-width: 340px;
+      border-radius: 22px;
+      padding: 32px 24px;
+      max-width: 350px;
       width: 100%;
-      box-shadow: 0 12px 30px rgba(189, 113, 136, 0.25);
-      animation: popIn 0.25s ease-out;
+      text-align: center;
+      box-shadow: 0 18px 40px rgba(189, 113, 136, 0.35);
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     @keyframes popIn {
-      from {
-        transform: scale(0.92);
+      0% {
+        transform: scale(0.75) translateY(20px);
         opacity: 0;
       }
-      to {
-        transform: scale(1);
+      100% {
+        transform: scale(1) translateY(0);
         opacity: 1;
       }
+    }
+
+    .pulsing-heart {
+      display: inline-block;
+      font-size: 2.8rem;
+      color: #bd7188;
+      margin-bottom: 8px;
+      animation: heartbeat 1.3s infinite ease-in-out;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.18); }
+      45% { transform: scale(0.96); }
+      65% { transform: scale(1.12); }
     }
 
     .modal-box h2 {
       margin: 0 0 10px;
       color: #bd7188;
-      font-size: 1.35rem;
+      font-size: 1.45rem;
     }
 
     .modal-box p {
-      margin: 0 0 20px;
-      line-height: 1.5;
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0 0 22px;
+      line-height: 1.55;
+      font-size: 0.96rem;
+      color: #4f333c;
     }
 
-    .close-btn {
+    .open-btn {
+      font-family: system-ui, -apple-system, sans-serif;
       background-color: #bd7188;
       color: #fffafa;
       border: none;
-      padding: 10px 22px;
-      border-radius: 8px;
-      font-size: 0.95rem;
+      padding: 12px 26px;
+      border-radius: 999px;
+      font-size: 0.98rem;
       font-weight: 600;
       cursor: pointer;
+      box-shadow: 0 6px 16px rgba(189, 113, 136, 0.35);
+      transition: transform 0.15s ease;
+    }
+
+    .open-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Click burst hearts */
+    .burst-item {
+      position: fixed;
+      pointer-events: none;
+      z-index: 2000;
+      font-size: 1.4rem;
+      animation: burstFly 1.1s ease-out forwards;
+    }
+
+    @keyframes burstFly {
+      0% {
+        transform: translate(0, 0) scale(0.5) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--dx), var(--dy)) scale(1.2) rotate(var(--rot));
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Page visible after closing the pop-up -->
-  <div class="main-card">
-    <h1>Welcome!</h1>
-    <p>You closed the pop-up. Tap below if you want to see it again.</p>
-    <button class="reopen-btn" onclick="openModal()">Show Pop-Up Again</button>
+  <!-- Floating Hearts & Flowers Background -->
+  <div class="bg-particles" id="bgParticles"></div>
+
+  <!-- The Love Letter Card -->
+  <div class="letter-card" id="letterCard">
+    <!-- Top-Left Floral Graphic -->
+    <svg class="flower-corner flower-top-left" viewBox="0 0 100 100" fill="none">
+      <circle cx="35" cy="35" r="14" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="55" cy="28" r="12" fill="#f7d2de" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="28" cy="55" r="12" fill="#f7d2de" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="52" cy="52" r="13" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="42" cy="42" r="7" fill="#bd7188"/>
+      <path d="M64 38 C78 36, 86 44, 80 54 C70 54, 64 46, 64 38 Z" fill="#e8b4c4"/>
+      <path d="M38 64 C36 78, 44 86, 54 80 C54 70, 46 64, 38 64 Z" fill="#e8b4c4"/>
+    </svg>
+
+    <!-- Bottom-Right Floral Graphic -->
+    <svg class="flower-corner flower-bottom-right" viewBox="0 0 100 100" fill="none">
+      <circle cx="35" cy="35" r="14" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="55" cy="28" r="12" fill="#f7d2de" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="28" cy="55" r="12" fill="#f7d2de" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="52" cy="52" r="13" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="42" cy="42" r="7" fill="#bd7188"/>
+      <path d="M64 38 C78 36, 86 44, 80 54 C70 54, 64 46, 64 38 Z" fill="#e8b4c4"/>
+      <path d="M38 64 C36 78, 44 86, 54 80 C54 70, 46 64, 38 64 Z" fill="#e8b4c4"/>
+    </svg>
+
+    <div class="letter-header">
+      <div class="header-florals">✿ &hearts; ❀</div>
+      <h1>To My Favorite Person</h1>
+      <div class="letter-date">A little note made just for you</div>
+    </div>
+
+    <div class="letter-body">
+      <p>Hi Love,</p>
+      <p>
+        I wanted to make something special for you—a small surprise you can open anytime just by scanning this code. Thank you for always being my safe space, my biggest supporter, and my favorite part of every day.
+      </p>
+      <p>
+        No matter how busy life gets, I am so grateful for everything we share and all the memories we keep building together. You mean more to me than words can ever fit on a screen.
+      </p>
+      <div class="letter-signoff">
+        <span>Forever yours,<br>Anne</span>
+        <span style="font-size: 1.5rem;">🌸</span>
+      </div>
+    </div>
+
+    <div class="footer-actions">
+      <button class="action-btn" onclick="spawnBurst(event)">Send More Hearts ♥</button>
+      <button class="action-btn" onclick="openModal()">Replay Pop-Up</button>
+    </div>
   </div>
 
   <!-- Pop-up that appears immediately when scanned -->
   <div class="modal-backdrop" id="qrModal">
     <div class="modal-box">
-      <h2>Surprise Pop-Up!</h2>
-      <p>Edit this message with whatever note, link, or announcement you want people to see on scan.</p>
-      <button class="close-btn" onclick="closeModal()">Got it</button>
+      <div class="pulsing-heart">&hearts;</div>
+      <h2>You Got a Secret Note!</h2>
+      <p>I made a little love letter just for you. Tap below to open it.</p>
+      <button class="open-btn" onclick="openLetter(event)">Read My Letter 🌸</button>
     </div>
   </div>
 
   <script>
     const modal = document.getElementById("qrModal");
+    const letterCard = document.getElementById("letterCard");
+    const bgParticles = document.getElementById("bgParticles");
+    const symbols = ["♥", "🌸", "❀", "✿", "💕", "🌷"];
 
-    function closeModal() {
+    // Create continuous floating hearts & flowers in the background
+    function createBackgroundParticles() {
+      for (let i = 0; i < 22; i++) {
+        const span = document.createElement("span");
+        span.className = "particle";
+        span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        span.style.left = Math.random() * 100 + "vw";
+        span.style.fontSize = (14 + Math.random() * 16) + "px";
+        span.style.color = Math.random() > 0.5 ? "#bd7188" : "#d98ca3";
+        span.style.animationDuration = (7 + Math.random() * 8) + "s";
+        span.style.animationDelay = (Math.random() * 6) + "s";
+        bgParticles.appendChild(span);
+      }
+    }
+
+    // Burst of hearts & petals on click
+    function spawnBurst(e) {
+      const rect = e.target.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top + rect.height / 2;
+
+      for (let i = 0; i < 18; i++) {
+        const item = document.createElement("span");
+        item.className = "burst-item";
+        item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        item.style.left = originX + "px";
+        item.style.top = originY + "px";
+        item.style.color = "#bd7188";
+
+        const angle = (Math.PI * 2 * i) / 18 + (Math.random() * 0.4);
+        const distance = 70 + Math.random() * 120;
+        item.style.setProperty("--dx", Math.cos(angle) * distance + "px");
+        item.style.setProperty("--dy", (Math.sin(angle) * distance - 40) + "px");
+        item.style.setProperty("--rot", (Math.random() * 360 - 180) + "deg");
+
+        document.body.appendChild(item);
+        setTimeout(() => item.remove(), 1100);
+      }
+    }
+
+    function openLetter(e) {
+      spawnBurst(e);
       modal.classList.add("hidden");
+      letterCard.classList.remove("reveal");
+      void letterCard.offsetWidth; // trigger reflow for animation replay
+      letterCard.classList.add("reveal");
     }
 
     function openModal() {
       modal.classList.remove("hidden");
     }
+
+    createBackgroundParticles();
   </script>
 
 </body>
