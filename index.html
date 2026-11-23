@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Pop-Up</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #fffafa;
+      color: #3a252c;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .main-card {
+      background-color: #fbe8ee;
+      border: 1.5px solid #bd7188;
+      border-radius: 16px;
+      padding: 28px 22px;
+      max-width: 360px;
+      width: 100%;
+    }
+
+    .main-card h1 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+      color: #bd7188;
+    }
+
+    .main-card p {
+      margin: 0 0 18px;
+      line-height: 1.5;
+    }
+
+    .reopen-btn {
+      background-color: #bd7188;
+      color: #fffafa;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    /* Pop-up overlay */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(58, 37, 44, 0.55);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.hidden {
+      display: none;
+    }
+
+    /* Pop-up box */
+    .modal-box {
+      background-color: #fffafa;
+      border: 2px solid #bd7188;
+      border-radius: 18px;
+      padding: 26px 22px;
+      max-width: 340px;
+      width: 100%;
+      box-shadow: 0 12px 30px rgba(189, 113, 136, 0.25);
+      animation: popIn 0.25s ease-out;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.92);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .modal-box h2 {
+      margin: 0 0 10px;
+      color: #bd7188;
+      font-size: 1.35rem;
+    }
+
+    .modal-box p {
+      margin: 0 0 20px;
+      line-height: 1.5;
+    }
+
+    .close-btn {
+      background-color: #bd7188;
+      color: #fffafa;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page visible after closing the pop-up -->
+  <div class="main-card">
+    <h1>Welcome!</h1>
+    <p>You closed the pop-up. Tap below if you want to see it again.</p>
+    <button class="reopen-btn" onclick="openModal()">Show Pop-Up Again</button>
+  </div>
+
+  <!-- Pop-up that appears immediately when scanned -->
+  <div class="modal-backdrop" id="qrModal">
+    <div class="modal-box">
+      <h2>Surprise Pop-Up!</h2>
+      <p>Edit this message with whatever note, link, or announcement you want people to see on scan.</p>
+      <button class="close-btn" onclick="closeModal()">Got it</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("qrModal");
+
+    function closeModal() {
+      modal.classList.add("hidden");
+    }
+
+    function openModal() {
+      modal.classList.remove("hidden");
+    }
+  </script>
+
+</body>
+</html>
