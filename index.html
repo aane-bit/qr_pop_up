@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>For You</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You ♥</title>
   <style>
+    :root {
+      --bg-light: #fffafa;
+      --bg-blush: #fbe8ee;
+      --accent: #bd7188;
+      --accent-dark: #934e64;
+      --ink: #351f26;
+      --muted: #7c5260;
+      --border-soft: rgba(189, 113, 136, 0.28);
+      --glass: rgba(255, 250, 250, 0.88);
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -12,19 +23,21 @@
     body {
       margin: 0;
       font-family: 'Georgia', serif;
-      background: linear-gradient(160deg, #fffafa 0%, #fbe8ee 100%);
-      color: #3a252c;
+      color: var(--ink);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 28px 16px;
       overflow-x: hidden;
-      position: relative;
+      background:
+        radial-gradient(circle at 15% 15%, #fbe8ee 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, #f6d5e0 0%, transparent 50%),
+        linear-gradient(165deg, var(--bg-light) 0%, var(--bg-blush) 100%);
     }
 
-    /* Ambient floating background particles */
-    .bg-particles {
+    /* Ambient floating petals & hearts */
+    .ambient-layer {
       position: fixed;
       inset: 0;
       pointer-events: none;
@@ -32,55 +45,54 @@
       z-index: 0;
     }
 
-    .particle {
+    .float-item {
       position: absolute;
       bottom: -40px;
-      opacity: 0;
-      animation: floatUp linear infinite;
       user-select: none;
+      animation: driftUp linear infinite;
+      filter: drop-shadow(0 2px 6px rgba(189, 113, 136, 0.18));
     }
 
-    @keyframes floatUp {
+    @keyframes driftUp {
       0% {
-        transform: translateY(0) rotate(0deg) scale(0.8);
+        transform: translateY(0) translateX(0) rotate(0deg) scale(0.85);
         opacity: 0;
       }
-      15% {
-        opacity: 0.75;
-      }
-      85% {
-        opacity: 0.6;
-      }
+      12% { opacity: 0.8; }
+      50% { transform: translateY(-55vh) translateX(18px) rotate(180deg) scale(1); }
+      88% { opacity: 0.65; }
       100% {
-        transform: translateY(-110vh) rotate(360deg) scale(1.1);
+        transform: translateY(-112vh) translateX(-14px) rotate(360deg) scale(1.12);
         opacity: 0;
       }
     }
 
-    /* Love Letter Card */
-    .letter-card {
+    /* Main Pro Card */
+    .letter-shell {
       position: relative;
       z-index: 2;
-      background-color: #fffafa;
-      border: 2px solid #bd7188;
-      border-radius: 22px;
-      padding: 38px 26px 32px;
-      max-width: 480px;
       width: 100%;
-      box-shadow: 0 14px 36px rgba(189, 113, 136, 0.22);
-      text-align: left;
+      max-width: 540px;
+      background: var(--glass);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1.5px solid rgba(189, 113, 136, 0.45);
+      border-radius: 26px;
+      padding: 36px 22px 30px;
+      box-shadow:
+        0 20px 50px rgba(189, 113, 136, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
       overflow: hidden;
-      transition: transform 0.5s ease, opacity 0.5s ease;
     }
 
-    .letter-card.reveal {
-      animation: cardReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    .letter-shell.revealed {
+      animation: cardEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes cardReveal {
+    @keyframes cardEntrance {
       0% {
         opacity: 0;
-        transform: translateY(24px) scale(0.96);
+        transform: translateY(28px) scale(0.96);
       }
       100% {
         opacity: 1;
@@ -88,117 +100,293 @@
       }
     }
 
-    /* Decorative SVG Flower Corners */
-    .flower-corner {
+    /* Corner Botanical SVGs */
+    .botanical {
       position: absolute;
-      width: 82px;
-      height: 82px;
+      width: 92px;
+      height: 92px;
       pointer-events: none;
-      opacity: 0.85;
-      animation: gentleSway 5s ease-in-out infinite alternate;
+      opacity: 0.78;
     }
 
-    .flower-top-left {
-      top: -10px;
-      left: -10px;
+    .botanical.tl {
+      top: -8px;
+      left: -8px;
+      animation: swayTL 6s ease-in-out infinite alternate;
     }
 
-    .flower-bottom-right {
-      bottom: -10px;
-      right: -10px;
-      transform: rotate(180deg);
-      animation-name: gentleSwayBottom;
+    .botanical.br {
+      bottom: -8px;
+      right: -8px;
+      animation: swayBR 6s ease-in-out infinite alternate;
     }
 
-    @keyframes gentleSway {
-      from { transform: rotate(-4deg) scale(0.98); }
-      to { transform: rotate(4deg) scale(1.03); }
+    @keyframes swayTL {
+      0% { transform: rotate(-3deg) scale(0.97); }
+      100% { transform: rotate(4deg) scale(1.03); }
     }
 
-    @keyframes gentleSwayBottom {
-      from { transform: rotate(176deg) scale(0.98); }
-      to { transform: rotate(184deg) scale(1.03); }
+    @keyframes swayBR {
+      0% { transform: rotate(177deg) scale(0.97); }
+      100% { transform: rotate(184deg) scale(1.03); }
     }
 
-    .letter-header {
+    /* Header */
+    .card-header {
       text-align: center;
+      padding-bottom: 18px;
       margin-bottom: 22px;
-      border-bottom: 1.5px dashed #e3aebf;
-      padding-bottom: 16px;
+      border-bottom: 1px dashed rgba(189, 113, 136, 0.4);
     }
 
-    .header-florals {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 6px;
-      color: #bd7188;
-      font-size: 1.1rem;
-    }
-
-    .letter-header h1 {
-      margin: 0;
-      font-size: 1.6rem;
-      color: #bd7188;
-    }
-
-    .letter-date {
+    .badge {
+      display: inline-block;
       font-family: system-ui, -apple-system, sans-serif;
-      font-size: 0.85rem;
-      color: #8c5a6a;
-      margin-top: 6px;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      background: var(--bg-blush);
+      border: 1px solid var(--border-soft);
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
     }
 
-    .letter-body p {
+    .card-header h1 {
+      margin: 0;
+      font-size: 1.7rem;
+      font-weight: normal;
+      color: var(--accent-dark);
+    }
+
+    /* Mode Tabs inside the card */
+    .mode-tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(251, 232, 238, 0.75);
+      padding: 5px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--bg-light);
+      color: var(--accent-dark);
+      box-shadow: 0 3px 10px rgba(189, 113, 136, 0.18);
+    }
+
+    .panel {
+      display: none;
+      animation: fadeTab 0.35s ease;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes fadeTab {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Letter Body */
+    .letter-text p {
+      margin: 0 0 15px;
       font-size: 1.03rem;
       line-height: 1.8;
-      margin: 0 0 16px;
     }
 
-    .letter-signoff {
-      margin-top: 26px;
+    .sign-off {
+      margin-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
       font-style: italic;
-      color: #bd7188;
-      font-weight: bold;
-      font-size: 1.1rem;
+      color: var(--accent-dark);
+      font-size: 1.08rem;
+    }
+
+    /* 10-Photos-Per-Page Grid */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .grid-card {
+      background: var(--bg-light);
+      border: 1.5px solid var(--border-soft);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(189, 113, 136, 0.14);
+      cursor: zoom-in;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 22px rgba(189, 113, 136, 0.24);
+    }
+
+    .grid-card img {
+      width: 100%;
+      height: 145px;
+      object-fit: cover;
+      display: block;
+      background: var(--bg-blush);
+    }
+
+    .grid-label {
+      padding: 8px 10px;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent-dark);
+      background: rgba(251, 232, 238, 0.55);
+      line-height: 1.35;
+    }
+
+    /* Pagination Controls */
+    .pagination-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-
-    .footer-actions {
-      text-align: center;
-      margin-top: 26px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .action-btn {
+      margin-top: 16px;
+      gap: 8px;
       font-family: system-ui, -apple-system, sans-serif;
-      background-color: #fbe8ee;
-      color: #bd7188;
-      border: 1.5px solid #bd7188;
-      padding: 9px 16px;
+    }
+
+    .nav-page-btn {
+      background: var(--bg-light);
+      border: 1.5px solid var(--accent);
+      color: var(--accent-dark);
+      padding: 8px 14px;
       border-radius: 999px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.15s ease, background-color 0.2s ease;
+      transition: all 0.2s ease;
     }
 
-    .action-btn:active {
+    .nav-page-btn:hover:not(:disabled) {
+      background: var(--accent);
+      color: var(--bg-light);
+    }
+
+    .nav-page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page-info {
+      font-size: 0.83rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+      text-align: center;
+    }
+
+    .page-pills {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .page-num-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      background: var(--bg-light);
+      color: var(--accent-dark);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .page-num-btn.active {
+      background: var(--accent);
+      color: var(--bg-light);
+    }
+
+    /* Reasons Card */
+    .reason-box {
+      background: var(--bg-blush);
+      border: 1.5px solid var(--border-soft);
+      border-radius: 18px;
+      padding: 24px 20px;
+      text-align: center;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .reason-quote {
+      font-size: 1.08rem;
+      line-height: 1.65;
+      color: var(--ink);
+      margin: 0 0 16px;
+    }
+
+    /* Footer Actions */
+    .footer-bar {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(189, 113, 136, 0.22);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .pill-btn {
+      background: var(--bg-blush);
+      color: var(--accent-dark);
+      border: 1.5px solid var(--accent);
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+
+    .pill-btn:hover {
+      background: var(--accent);
+      color: var(--bg-light);
+    }
+
+    .pill-btn:active {
       transform: scale(0.95);
     }
 
-    /* Pop-up overlay */
-    .modal-backdrop {
+    /* Scan Pop-Up Modal */
+    .modal-overlay {
       position: fixed;
       inset: 0;
-      background-color: rgba(58, 37, 44, 0.65);
-      backdrop-filter: blur(4px);
+      background: rgba(45, 24, 31, 0.68);
+      backdrop-filter: blur(6px);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -207,99 +395,139 @@
       transition: opacity 0.35s ease;
     }
 
-    .modal-backdrop.hidden {
+    .modal-overlay.hidden {
       opacity: 0;
       pointer-events: none;
     }
 
-    /* Pop-up envelope box */
-    .modal-box {
-      position: relative;
-      background: linear-gradient(180deg, #fffafa 0%, #fbe8ee 100%);
-      border: 2px solid #bd7188;
-      border-radius: 22px;
-      padding: 32px 24px;
-      max-width: 350px;
+    .modal-card {
       width: 100%;
+      max-width: 360px;
+      background: linear-gradient(170deg, var(--bg-light) 0%, var(--bg-blush) 100%);
+      border: 2px solid var(--accent);
+      border-radius: 24px;
+      padding: 32px 24px;
       text-align: center;
-      box-shadow: 0 18px 40px rgba(189, 113, 136, 0.35);
-      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 24px 55px rgba(45, 24, 31, 0.35);
+      animation: modalPop 0.42s cubic-bezier(0.2, 0.9, 0.3, 1.15);
     }
 
-    @keyframes popIn {
-      0% {
-        transform: scale(0.75) translateY(20px);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-      }
+    @keyframes modalPop {
+      0% { opacity: 0; transform: scale(0.82) translateY(18px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    .pulsing-heart {
+    .pulse-heart {
+      font-size: 2.9rem;
+      color: var(--accent);
       display: inline-block;
-      font-size: 2.8rem;
-      color: #bd7188;
-      margin-bottom: 8px;
-      animation: heartbeat 1.3s infinite ease-in-out;
+      animation: pulseBeat 1.35s infinite ease-in-out;
     }
 
-    @keyframes heartbeat {
+    @keyframes pulseBeat {
       0%, 100% { transform: scale(1); }
       25% { transform: scale(1.18); }
       45% { transform: scale(0.96); }
       65% { transform: scale(1.12); }
     }
 
-    .modal-box h2 {
-      margin: 0 0 10px;
-      color: #bd7188;
+    .modal-card h2 {
+      margin: 10px 0 8px;
+      color: var(--accent-dark);
       font-size: 1.45rem;
     }
 
-    .modal-box p {
+    .modal-card p {
       font-family: system-ui, -apple-system, sans-serif;
       margin: 0 0 22px;
+      font-size: 0.94rem;
       line-height: 1.55;
-      font-size: 0.96rem;
-      color: #4f333c;
+      color: var(--muted);
     }
 
-    .open-btn {
+    .primary-cta {
       font-family: system-ui, -apple-system, sans-serif;
-      background-color: #bd7188;
-      color: #fffafa;
+      background: var(--accent);
+      color: var(--bg-light);
       border: none;
       padding: 12px 26px;
       border-radius: 999px;
-      font-size: 0.98rem;
-      font-weight: 600;
+      font-size: 0.95rem;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 6px 16px rgba(189, 113, 136, 0.35);
-      transition: transform 0.15s ease;
+      box-shadow: 0 8px 20px rgba(189, 113, 136, 0.4);
+      transition: transform 0.15s ease, background 0.2s ease;
     }
 
-    .open-btn:active {
+    .primary-cta:hover {
+      background: var(--accent-dark);
+    }
+
+    .primary-cta:active {
       transform: scale(0.95);
     }
 
-    /* Click burst hearts */
-    .burst-item {
+    /* Fullscreen Photo Lightbox */
+    .lightbox {
       position: fixed;
-      pointer-events: none;
+      inset: 0;
+      background: rgba(25, 12, 17, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
       z-index: 2000;
-      font-size: 1.4rem;
-      animation: burstFly 1.1s ease-out forwards;
     }
 
-    @keyframes burstFly {
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 92vw;
+      max-height: 75vh;
+      border-radius: 16px;
+      border: 2px solid var(--bg-blush);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox-caption {
+      font-family: system-ui, -apple-system, sans-serif;
+      color: var(--bg-blush);
+      margin-top: 12px;
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    .lightbox-close {
+      margin-top: 14px;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg-light);
+      color: var(--ink);
+      border: none;
+      padding: 9px 22px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Burst effect */
+    .burst-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 3000;
+      font-size: 1.35rem;
+      animation: burstOut 1.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes burstOut {
       0% {
         transform: translate(0, 0) scale(0.5) rotate(0deg);
         opacity: 1;
       }
       100% {
-        transform: translate(var(--dx), var(--dy)) scale(1.2) rotate(var(--rot));
+        transform: translate(var(--tx), var(--ty)) scale(1.25) rotate(var(--rot));
         opacity: 0;
       }
     }
@@ -307,129 +535,339 @@
 </head>
 <body>
 
-  <!-- Floating Hearts & Flowers Background -->
-  <div class="bg-particles" id="bgParticles"></div>
+  <!-- Floating Hearts & Flowers -->
+  <div class="ambient-layer" id="ambientLayer"></div>
 
-  <!-- The Love Letter Card -->
-  <div class="letter-card" id="letterCard">
-    <!-- Top-Left Floral Graphic -->
-    <svg class="flower-corner flower-top-left" viewBox="0 0 100 100" fill="none">
-      <circle cx="35" cy="35" r="14" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
-      <circle cx="55" cy="28" r="12" fill="#f7d2de" stroke="#bd7188" stroke-width="2"/>
-      <circle cx="28" cy="55" r="12" fill="#f7d2de" stroke="#bd7188" stroke-width="2"/>
-      <circle cx="52" cy="52" r="13" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
-      <circle cx="42" cy="42" r="7" fill="#bd7188"/>
-      <path d="M64 38 C78 36, 86 44, 80 54 C70 54, 64 46, 64 38 Z" fill="#e8b4c4"/>
-      <path d="M38 64 C36 78, 44 86, 54 80 C54 70, 46 64, 38 64 Z" fill="#e8b4c4"/>
+  <!-- Main Card -->
+  <main class="letter-shell" id="letterShell">
+    <svg class="botanical tl" viewBox="0 0 100 100" fill="none">
+      <circle cx="34" cy="34" r="14" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="54" cy="28" r="12" fill="#f5cddb" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="28" cy="54" r="12" fill="#f5cddb" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="51" cy="51" r="13" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="41" cy="41" r="6.5" fill="#bd7188"/>
+      <path d="M63 38 C78 36, 85 45, 79 54 C69 54, 63 46, 63 38 Z" fill="#e6b0c2"/>
+      <path d="M38 63 C36 78, 45 85, 54 79 C54 69, 46 63, 38 63 Z" fill="#e6b0c2"/>
     </svg>
 
-    <!-- Bottom-Right Floral Graphic -->
-    <svg class="flower-corner flower-bottom-right" viewBox="0 0 100 100" fill="none">
-      <circle cx="35" cy="35" r="14" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
-      <circle cx="55" cy="28" r="12" fill="#f7d2de" stroke="#bd7188" stroke-width="2"/>
-      <circle cx="28" cy="55" r="12" fill="#f7d2de" stroke="#bd7188" stroke-width="2"/>
-      <circle cx="52" cy="52" r="13" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
-      <circle cx="42" cy="42" r="7" fill="#bd7188"/>
-      <path d="M64 38 C78 36, 86 44, 80 54 C70 54, 64 46, 64 38 Z" fill="#e8b4c4"/>
-      <path d="M38 64 C36 78, 44 86, 54 80 C54 70, 46 64, 38 64 Z" fill="#e8b4c4"/>
+    <svg class="botanical br" viewBox="0 0 100 100" fill="none">
+      <circle cx="34" cy="34" r="14" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="54" cy="28" r="12" fill="#f5cddb" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="28" cy="54" r="12" fill="#f5cddb" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="51" cy="51" r="13" fill="#fbe8ee" stroke="#bd7188" stroke-width="2"/>
+      <circle cx="41" cy="41" r="6.5" fill="#bd7188"/>
+      <path d="M63 38 C78 36, 85 45, 79 54 C69 54, 63 46, 63 38 Z" fill="#e6b0c2"/>
+      <path d="M38 63 C36 78, 45 85, 54 79 C54 69, 46 63, 38 63 Z" fill="#e6b0c2"/>
     </svg>
 
-    <div class="letter-header">
-      <div class="header-florals">✿ &hearts; ❀</div>
-      <h1>To My Favorite Person</h1>
-      <div class="letter-date">A little note made just for you</div>
-    </div>
+    <header class="card-header">
+      <div class="badge">✿ Private QR Keepsake ✿</div>
+      <h1>For My Favorite Person</h1>
+    </header>
 
-    <div class="letter-body">
-      <p>Hi Love,</p>
-      <p>
-        I wanted to make something special for you—a small surprise you can open anytime just by scanning this code. Thank you for always being my safe space, my biggest supporter, and my favorite part of every day.
-      </p>
-      <p>
-        No matter how busy life gets, I am so grateful for everything we share and all the memories we keep building together. You mean more to me than words can ever fit on a screen.
-      </p>
-      <div class="letter-signoff">
-        <span>Forever yours,<br>Anne</span>
-        <span style="font-size: 1.5rem;">🌸</span>
+    <!-- Interactive Tabs -->
+    <nav class="mode-tabs" aria-label="Sections">
+      <button class="tab-btn active" type="button" onclick="switchTab('letter', this)">Love Letter</button>
+      <button class="tab-btn" type="button" onclick="switchTab('photos', this)">Our Photos (50)</button>
+      <button class="tab-btn" type="button" onclick="switchTab('reasons', this)">Little Notes</button>
+    </nav>
+
+    <!-- Tab 1: Letter -->
+    <section class="panel active" id="panel-letter">
+      <div class="letter-text">
+        <p>Hi Garfield,</p>
+        <p>
+          I wanted to build something special you can open anytime with a simple scan. Thank you for being my calm, my encouragement, and my favorite place to return to.
+        </p>
+        <p>
+          Every moment we share means so much to me, and I’m always excited for everything ahead of us.
+        </p>
       </div>
-    </div>
+      <div class="sign-off">
+        <span>Always yours,<br>Anne</span>
+        <span style="font-size: 1.5rem;">♥ 🌸</span>
+      </div>
+    </section>
 
-    <div class="footer-actions">
-      <button class="action-btn" onclick="spawnBurst(event)">Send More Hearts ♥</button>
-      <button class="action-btn" onclick="openModal()">Replay Pop-Up</button>
+    <!-- Tab 2: 10 Photos Per Page -->
+    <section class="panel" id="panel-photos">
+      <div class="photo-grid" id="photoGrid"></div>
+
+      <div class="pagination-bar">
+        <button class="nav-page-btn" id="prevPageBtn" type="button" onclick="prevPage()">← Prev 10</button>
+        <span class="page-info" id="pageInfo">Page 1 of 5</span>
+        <button class="nav-page-btn" id="nextPageBtn" type="button" onclick="nextPage()">Next 10 →</button>
+      </div>
+
+      <div class="page-pills" id="pagePills"></div>
+    </section>
+
+    <!-- Tab 3: Little Notes / Reasons -->
+    <section class="panel" id="panel-reasons">
+      <div class="reason-box">
+        <p class="reason-quote" id="reasonText">
+          You make ordinary days feel lighter just by being there.
+        </p>
+        <button class="pill-btn" type="button" onclick="nextReason()">Another Note ♥</button>
+      </div>
+    </section>
+
+    <div class="footer-bar">
+      <button class="pill-btn" type="button" onclick="burstHearts(event)">Send Hearts ♥</button>
+      <button class="pill-btn" type="button" onclick="reopenScanModal()">Show Pop-Up Again</button>
+    </div>
+  </main>
+
+  <!-- Pop-Up Shown on QR Scan -->
+  <div class="modal-overlay" id="scanModal">
+    <div class="modal-card">
+      <div class="pulse-heart">♥</div>
+      <h2>A Surprise Just For You</h2>
+      <p>You scanned the code! Tap below to open your letter, 50 photos, and little notes.</p>
+      <button class="primary-cta" type="button" onclick="unlockExperience(event)">Open My Surprise 🌸</button>
     </div>
   </div>
 
-  <!-- Pop-up that appears immediately when scanned -->
-  <div class="modal-backdrop" id="qrModal">
-    <div class="modal-box">
-      <div class="pulsing-heart">&hearts;</div>
-      <h2>You Got a Secret Note!</h2>
-      <p>I made a little love letter just for you. Tap below to open it.</p>
-      <button class="open-btn" onclick="openLetter(event)">Read My Letter 🌸</button>
-    </div>
+  <!-- Fullscreen Photo Viewer -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Enlarged memory" />
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+    <button class="lightbox-close" type="button" onclick="closeLightbox()">Close Photo</button>
   </div>
 
   <script>
-    const modal = document.getElementById("qrModal");
-    const letterCard = document.getElementById("letterCard");
-    const bgParticles = document.getElementById("bgParticles");
-    const symbols = ["♥", "🌸", "❀", "✿", "💕", "🌷"];
+    const symbols = ["♥", "🌸", "❀", "✿", "🌷", "💕"];
+    const TOTAL_PHOTOS = 50;
+    const PHOTOS_PER_PAGE = 10;
 
-    // Create continuous floating hearts & flowers in the background
-    function createBackgroundParticles() {
-      for (let i = 0; i < 22; i++) {
-        const span = document.createElement("span");
-        span.className = "particle";
-        span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-        span.style.left = Math.random() * 100 + "vw";
-        span.style.fontSize = (14 + Math.random() * 16) + "px";
-        span.style.color = Math.random() > 0.5 ? "#bd7188" : "#d98ca3";
-        span.style.animationDuration = (7 + Math.random() * 8) + "s";
-        span.style.animationDelay = (Math.random() * 6) + "s";
-        bgParticles.appendChild(span);
+    // Customize all 50 short notes below (one for each photo from 1 to 50)
+    const customNotes = {
+      1: "I Love you! ♥",
+      2: "Christmass with you! When was this? Last year?🐚🧑‍🎄",
+      3: "When in Siquijor. 💕",
+      4: "I am so short hahahaha 😂",
+      5: "Somewhere far away yet both so fine! ✨",
+      6: "Bus Ride From Kalibo. ❀",
+      7: "Best place to find peace! 💖",
+      8: "Tita Magz! with zzzz! Okay? 🌺",
+      9: "Shinning bright in the night!😂😏 ☀️",
+      10: "You and Kate looks so unsure! ✿",
+      11: "Love is when I am next to you! 💘",
+      12: "Pouty lips hahahaha! 🤣💋",
+      13: "Our Frozen Mango Margarita!🥭🍸",
+      14: "We look so cool! 🌊",
+      15: "Nice place to be! heart",
+      16: "Frozen Mango Margarita again!🤣🍸",
+      17: "When in Sabang Puerto Galera.💞",
+      18: "Breakfast in bed and in the box!🤣",
+      19: "I love you!😘🤍",
+      20: "Happy to see you not scratching!😏 🌿",
+      21: "Ohhh! This is so sweet!🥹💓",
+      22: "Not scratching! Very good!🌸",
+      23: "Ahmmm Kate took this photo!😄🎈",
+      24: "Thank you for this!🥹🌷",
+      25: "As long as you are not scratching! 💞",
+      26: "We got enough sun! Browned too much!☀️",
+      27: "When inTagaytag with you!💕🌺",
+      28: "You have to know I really like your eyes!🫶",
+      29: "At Calypso! ❀",
+      30: "The best part of the day!💓",
+      31: "This look hahahaha, what did I do?🤣🙈",
+      32: "I forgot the place! 🤔",
+      33: "Handsome! Guapo! 💕",
+      34: "Hahahaha what are you searching here? 🤣",
+      35: "Dont worry you werent that white when I took this photo 💖",
+      36: "Hahahaha cant find the right food for us!🤣",
+      37: "Yeah! Right!🤣",
+      38: "At Diniwid, now not allowed to go there!😏",
+      39: "The coconut behind the camera`! 🤣✨",
+      40: "Thank you for being there for me!🥹💕",
+      41: "Hans took this photo at Nabas?🍃",
+      42: "Aha! The first time I Pop up in your instagram!🤣🌿",
+      43: "Favorite place!💞",
+      44: "Shes so serious! 🌸",
+      45: "We got the whole pool for ourselves!🌊😍",
+      46: "The woman with here iconic pose!🤣 🌺",
+      47: "Love this!🫶",
+      48: "I told you! You have a lovely eyes!💖",
+      49: "The first time I am on the plane! 💖",
+      50: "Where is this place?🐚🏖️🌸"
+    };
+
+    // Expects 1.jpg through 50.jpg in the same folder as index.html
+    const photos = Array.from({ length: TOTAL_PHOTOS }, (_, i) => {
+      const num = i + 1;
+      return {
+        num,
+        src: `${num}.jpg`,
+        label: customNotes[num] || `Sweet memory ♥`
+      };
+    });
+
+    const reasons = [
+      "You make ordinary days feel lighter just by being there.",
+      "Thank you for your patience, kindness, and steady support.",
+      "Every memory with you is something I hold onto close.",
+      "No matter where life takes us, I'm glad we're walking it together."
+    ];
+
+    let currentPage = 0;
+    let currentReason = 0;
+
+    // Floating background items
+    const ambientLayer = document.getElementById("ambientLayer");
+    for (let i = 0; i < 24; i++) {
+      const el = document.createElement("span");
+      el.className = "float-item";
+      el.textContent = symbols[i % symbols.length];
+      el.style.left = (Math.random() * 100) + "vw";
+      el.style.fontSize = (14 + Math.random() * 15) + "px";
+      el.style.color = i % 2 === 0 ? "#bd7188" : "#d98ca3";
+      el.style.animationDuration = (8 + Math.random() * 7) + "s";
+      el.style.animationDelay = (Math.random() * 6) + "s";
+      ambientLayer.appendChild(el);
+    }
+
+    // Pop-up controls
+    const scanModal = document.getElementById("scanModal");
+    const letterShell = document.getElementById("letterShell");
+
+    function unlockExperience(e) {
+      burstHearts(e);
+      scanModal.classList.add("hidden");
+      letterShell.classList.remove("revealed");
+      void letterShell.offsetWidth;
+      letterShell.classList.add("revealed");
+    }
+
+    function reopenScanModal() {
+      scanModal.classList.remove("hidden");
+    }
+
+    // Tabs
+    function switchTab(tabName, btnEl) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btnEl.classList.add("active");
+
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+      document.getElementById("panel-" + tabName).classList.add("active");
+    }
+
+    // 10-Photos-Per-Page Renderer
+    const photoGrid = document.getElementById("photoGrid");
+    const pageInfo = document.getElementById("pageInfo");
+    const pagePills = document.getElementById("pagePills");
+    const prevPageBtn = document.getElementById("prevPageBtn");
+    const nextPageBtn = document.getElementById("nextPageBtn");
+    const totalPages = Math.ceil(photos.length / PHOTOS_PER_PAGE);
+
+    function renderPhotoPage() {
+      const start = currentPage * PHOTOS_PER_PAGE;
+      const end = Math.min(start + PHOTOS_PER_PAGE, photos.length);
+      const pageItems = photos.slice(start, end);
+
+      photoGrid.innerHTML = "";
+      pageItems.forEach((item) => {
+        const noteText = customNotes[item.num] || item.label;
+
+        const card = document.createElement("div");
+        card.className = "grid-card";
+        card.onclick = () => openLightbox(item.src, noteText);
+
+        const img = document.createElement("img");
+        img.src = item.src;
+        img.alt = noteText;
+        img.loading = "lazy";
+
+        const footer = document.createElement("div");
+        footer.className = "grid-label";
+        footer.textContent = noteText;
+
+        card.appendChild(img);
+        card.appendChild(footer);
+        photoGrid.appendChild(card);
+      });
+
+      pageInfo.textContent = `Page ${currentPage + 1} of ${totalPages} (${start + 1}–${end})`;
+      prevPageBtn.disabled = currentPage === 0;
+      nextPageBtn.disabled = currentPage >= totalPages - 1;
+
+      renderPagePills();
+    }
+
+    function renderPagePills() {
+      pagePills.innerHTML = "";
+      for (let p = 0; p < totalPages; p++) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "page-num-btn" + (p === currentPage ? " active" : "");
+        btn.textContent = p + 1;
+        btn.onclick = () => {
+          currentPage = p;
+          renderPhotoPage();
+        };
+        pagePills.appendChild(btn);
       }
     }
 
-    // Burst of hearts & petals on click
-    function spawnBurst(e) {
-      const rect = e.target.getBoundingClientRect();
-      const originX = rect.left + rect.width / 2;
-      const originY = rect.top + rect.height / 2;
-
-      for (let i = 0; i < 18; i++) {
-        const item = document.createElement("span");
-        item.className = "burst-item";
-        item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-        item.style.left = originX + "px";
-        item.style.top = originY + "px";
-        item.style.color = "#bd7188";
-
-        const angle = (Math.PI * 2 * i) / 18 + (Math.random() * 0.4);
-        const distance = 70 + Math.random() * 120;
-        item.style.setProperty("--dx", Math.cos(angle) * distance + "px");
-        item.style.setProperty("--dy", (Math.sin(angle) * distance - 40) + "px");
-        item.style.setProperty("--rot", (Math.random() * 360 - 180) + "deg");
-
-        document.body.appendChild(item);
-        setTimeout(() => item.remove(), 1100);
+    function nextPage() {
+      if (currentPage < totalPages - 1) {
+        currentPage++;
+        renderPhotoPage();
       }
     }
 
-    function openLetter(e) {
-      spawnBurst(e);
-      modal.classList.add("hidden");
-      letterCard.classList.remove("reveal");
-      void letterCard.offsetWidth; // trigger reflow for animation replay
-      letterCard.classList.add("reveal");
+    function prevPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        renderPhotoPage();
+      }
     }
 
-    function openModal() {
-      modal.classList.remove("hidden");
+    // Lightbox
+    function openLightbox(src, caption) {
+      document.getElementById("lightboxImg").src = src;
+      document.getElementById("lightboxCaption").textContent = caption;
+      document.getElementById("lightbox").classList.add("open");
     }
 
-    createBackgroundParticles();
+    function closeLightbox() {
+      document.getElementById("lightbox").classList.remove("open");
+    }
+
+    // Reasons switcher
+    function nextReason() {
+      currentReason = (currentReason + 1) % reasons.length;
+      document.getElementById("reasonText").textContent = reasons[currentReason];
+    }
+
+    // Burst animation
+    function burstHearts(e) {
+      const target = e?.currentTarget;
+      const rect = target ? target.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement("span");
+        p.className = "burst-particle";
+        p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        p.style.left = cx + "px";
+        p.style.top = cy + "px";
+        p.style.color = "#bd7188";
+
+        const angle = (Math.PI * 2 * i) / 20 + (Math.random() * 0.35);
+        const dist = 75 + Math.random() * 125;
+        p.style.setProperty("--tx", Math.cos(angle) * dist + "px");
+        p.style.setProperty("--ty", (Math.sin(angle) * dist - 45) + "px");
+        p.style.setProperty("--rot", (Math.random() * 360 - 180) + "deg");
+
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1150);
+      }
+    }
+
+    renderPhotoPage();
   </script>
-
 </body>
 </html>
